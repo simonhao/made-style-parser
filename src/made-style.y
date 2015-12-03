@@ -233,8 +233,19 @@ Value
   ;
 
 Expr
-  : Term -> $1
-  | Expr Operator Term -> $1+$2+$3
+  : Term
+    {
+      $$ = {
+        type: 'expr',
+        nodes: [$1]
+      };
+    }
+  | Expr Operator Term
+    {
+      $$ = $1;
+      $$.nodes.push($2);
+      $$.nodes.push($3);
+    }
   ;
 Term
   : Computable-Term -> $1
@@ -246,7 +257,7 @@ Computable-Term
   : NUMBER -> $1
   | DIMENSION -> $1
   | PERCENTAGE -> $1
-  | FUNCTION Value ")"
+  | FUNCTION Real-Param-List ")"
     {
       $$ = {
         type: 'function',
@@ -258,9 +269,41 @@ Computable-Term
 Unary-Operator
   : "-" -> $1
   ;
+
+Real-Param-List
+  : Real-Param -> [$1]
+  | Real-Param-List "," Real-Param
+    {
+      $$ = $1;
+      $$.push($3);
+    }
+  ;
+
+Real-Param
+  : Term
+    {
+      $$ = {
+        type: 'real-param',
+        nodes: [$1]
+      };
+    }
+  | Real-Param "/" Term
+    {
+      $$ = $1;
+      $$.nodes.push($2);
+      $$.nodes.push($3);
+    }
+  ;
+
 String-Term
   : STRING -> $1
-  | IDENT -> $1
+  | IDENT
+    {
+      $$ = {
+        type: 'ident',
+        val: $1
+      };
+    }
   | UNICODERANGE -> $1
   | HEX-COLOR -> $1
   ;
