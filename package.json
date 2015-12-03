@@ -1,0 +1,26 @@
+{
+  "name": "made-style-parser",
+  "version": "0.1.0",
+  "description": "made style parser",
+  "main": "./lib/parser.js",
+  "scripts": {
+    "prepublish": "make build",
+    "test": "node ./test/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simonhao/made-style-parser.git"
+  },
+  "keywords": [
+    "css"
+  ],
+  "author": "simonhao",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/simonhao/made-style-parser/issues"
+  },
+  "homepage": "https://github.com/simonhao/made-style-parser#readme",
+  "dependencies": {
+    "jison": "^0.4.15"
+  }
+}
