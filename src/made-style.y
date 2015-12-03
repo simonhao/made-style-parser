@@ -144,15 +144,37 @@ Media-Query-List
   ;
 
 Media-Query
-  : Query-Parts -> $1
-  | Media-Query AND Query-Parts ->$1+ " " + $2 + " " +$3
+  : Query-Parts
+    {
+      $$ = {
+        type: 'media-query',
+        nodes: [$1]
+      };
+    }
+  | Media-Query AND Query-Parts
+    {
+      $$ = $1;
+      $$.nodes.push($3);
+    }
   ;
 
 Query-Parts
-  : Media-Type -> $1
-  | "(" IDENT ":" DIMENSION ")" -> $1+$2+$3+$4+$5
+  : Media-Type
+    {
+      $$ = {
+        type: 'media-type',
+        val: $1
+      };
+    }
+  | "(" IDENT ":" Expr ")"
+    {
+      $$ = {
+        type: 'media-parts',
+        name: $2,
+        nodes: $4
+      };
+    }
   ;
-
 Media-Type
   : IDENT -> $1
   | ONLY IDENT -> $1+$2
