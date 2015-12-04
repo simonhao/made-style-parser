@@ -328,3 +328,15 @@ Pseudo-Selector
   | ":" ":" IDENT
   | ":" ":" Function-Pseudo
   ;
+
+Function-Pseudo
+  : FUNCTION ")"
+  | FUNCTION Pseudo-Value ")"
+  ;
+
+Pseudo-Value
+  : ANB
+  | Value
+  ;
+
+

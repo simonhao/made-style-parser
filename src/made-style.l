@@ -52,6 +52,7 @@ unicode-range   [uU]?\+{hex-digit}{1,6}|{unicode-range-times}|[uU]?\+{hex-digit}
 "@"{ident}      {return 'AT-KEYWORD';}
 {hex-color}     {return 'HEX-COLOR';}
 "#"{nmchar}*    {return 'HASH';}
+{ident}\(       {return 'FUNCTION';}
 "or"            {return 'OR';}
 "only"          {return 'ONLY';}
 "not"           {return 'NOT';}
@@ -63,7 +64,6 @@ unicode-range   [uU]?\+{hex-digit}{1,6}|{unicode-range-times}|[uU]?\+{hex-digit}
 {number}"%"     {return 'PERCENTAGE';}
 {number}{ident} {return 'DIMENSION';}
 {number}        {return 'NUMBER';}
-{ident}\(       {return 'FUNCTION';}
 {ident}         {return 'IDENT';}
 {unicode-range} {return 'UNICODE-RANGE';}
 "~="            {return 'INCLUDE-MATCH';}
