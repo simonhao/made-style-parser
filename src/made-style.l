@@ -52,6 +52,7 @@ unicode-range   [uU]?\+{hex-digit}{1,6}|{unicode-range-times}|[uU]?\+{hex-digit}
 "@"{ident}      {return 'AT-KEYWORD';}
 {hex-color}     {return 'HEX-COLOR';}
 "#"{nmchar}*    {return 'HASH';}
+"or"            {return 'OR';}
 "only"          {return 'ONLY';}
 "not"           {return 'NOT';}
 "and"           {return 'AND';}
