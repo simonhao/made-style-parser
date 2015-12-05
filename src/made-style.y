@@ -26,7 +26,7 @@ Rule-List
   : Qualified-Rule
     {
       $$ = {
-        type: 'rule-list',
+        type: 'rule_list',
         nodes: [$1]
       };
     }
@@ -180,7 +180,7 @@ At-Rule
   : AT-KEYWORD Rule-Block
     {
       $$ = {
-        type: 'at-rule',
+        type: 'at_rule',
         rule: $2
       };
     }
@@ -206,7 +206,7 @@ Keyframe-List
   : Keyframe
     {
       $$ = {
-        type: 'keyframe-list',
+        type: 'keyframe_list',
         nodes: [$1]
       };
     }
@@ -243,7 +243,7 @@ Declaration-Set
   : Declaration-Rule
     {
       $$ = {
-        type: 'declaration-set',
+        type: 'declaration_set',
         nodes: [$1]
       };
     }
@@ -284,7 +284,7 @@ Reset-Param
   : IDENT "." "." "."
     {
       $$ = {
-        type: 'reset-param',
+        type: 'reset_param',
         name: $1
       };
     }
@@ -401,7 +401,7 @@ Declaration-Set-Rule
   : Selector-List Rule-Block
     {
       $$ = {
-        type: 'declaration-set',
+        type: 'declaration_set',
         selector: $1,
         rule: $2
       };
@@ -412,7 +412,7 @@ Selector-List
   : Complex-Selector
     {
       $$ = {
-        type: 'selector-list',
+        type: 'selector_list',
         nodes: [$1]
       };
     }
@@ -443,7 +443,7 @@ Compound-Selector
   : Simple-Selector
     {
       $$ = {
-        type: 'selector-compound',
+        type: 'selector_compound',
         nodes: [$1]
       };
     }
@@ -484,7 +484,7 @@ Parent-Selector
   : "&"
     {
       $$ = {
-        type: 'parent-selector'
+        type: 'parent_selector'
       };
     }
   ;
