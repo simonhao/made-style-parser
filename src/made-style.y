@@ -440,11 +440,17 @@ Complex-Selector
   ;
 
 Compound-Selector
-  : Simple-Selector -> [$1]
+  : Simple-Selector
+    {
+      $$ = {
+        type: 'selector-compound',
+        nodes: [$1]
+      };
+    }
   | Compound-Selector NonStart-Selector
     {
       $$ = $1;
-      $$.push($2);
+      $$.nodes.push($2);
     }
   ;
 
