@@ -1,8 +1,7 @@
 /* lexical scanner from W3C spec. see http://www.w3.org/TR/css3-syntax/#lexical */
 
-single-comment  \/\*[^*]*\*+([^/*][^*]*\*+)*\/
-multi-comment   \/\/[^\n\r\f]*
-comment         {single-comment}|{multi-comment}
+multi-comment   \/\*[^*]*\*+([^/*][^*]*\*+)*\/
+single-comment  \/\/[^\n\r\f]*
 
 newline         \n|\r\n|\r|\f
 space           " "
@@ -42,10 +41,12 @@ unicode-range   [uU]?\+{hex-digit}{1,6}|{unicode-range-times}|[uU]?\+{hex-digit}
 
 %%
 
-{comment}       {return 'COMMENT';}
+{single-comment} {return 'SINGLE-COMMENT';}
+{multi-comment} {return 'MULTI-COMMENT';}
 {whitespace}+   {/* ignore whitespace */}
 {newline}       {/* ignore newline */}
 "@import"       {return 'IMPORT';}
+"@require"      {return 'REQUIRE';}
 "@keyframes"    {return 'KEYFRAMES';}
 "@media"        {return 'MEDIA';}
 ":root"         {return 'ROOT';}

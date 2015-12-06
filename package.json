@@ -1,6 +1,6 @@
 {
   "name": "made-style-parser",
-  "version": "0.4.3",
+  "version": "0.4.16",
   "description": "made style parser",
   "main": "./lib/parser.js",
   "scripts": {

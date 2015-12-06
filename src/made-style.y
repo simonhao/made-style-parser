@@ -23,26 +23,27 @@ Stylesheet
   ;
 
 Rule-List
-  : Qualified-Rule
-    {
-      $$ = {
-        type: 'rule_list',
-        nodes: [$1]
-      };
-    }
+  : Qualified-Rule -> [$1]
   | Rule-List Qualified-Rule
     {
       $$ = $1;
-      $$.nodes.push($2);
+      $$.push($2);
     }
   ;
 
 Qualified-Rule
-  : COMMENT
+  : SINGLE-COMMENT
     {
       $$ = {
         type: 'comment',
-        val: $1
+        val: $1.substring(2)
+      };
+    }
+  | MULTI-COMMENT
+    {
+      $$ = {
+        type: 'comment',
+        val: $1.substring(2, $1.length-2)
       };
     }
   | Media-Query-Rule -> $1
@@ -171,7 +172,16 @@ Import-Rule
     {
       $$ = {
         type: 'import',
-        id: $2
+        once: true,
+        id: $2.substring(1, $2.length-1)
+      };
+    }
+  | REQUIRE STRING ";"
+    {
+      $$ = {
+        type: 'import',
+        once: false,
+        id: $2.substring(1, $2.length-1)
       };
     }
   ;
@@ -181,6 +191,7 @@ At-Rule
     {
       $$ = {
         type: 'at_rule',
+        name: $1,
         rule: $2
       };
     }
@@ -243,7 +254,7 @@ Declaration-Set
   : Declaration-Rule
     {
       $$ = {
-        type: 'declaration_set',
+        type: 'declaration_list',
         nodes: [$1]
       };
     }
@@ -259,7 +270,7 @@ Mixin-Rule
     {
       $$ = {
         type: 'mixin',
-        name: $1,
+        name: $1.substring(0, $1.length-1),
         param: $2,
         rule: $4
       };
@@ -391,7 +402,7 @@ Function-Term
     {
       $$ = {
         type: 'function',
-        name: $1,
+        name: $1.substring(0, $1.length-1),
         args: $2
       };
     }
@@ -428,30 +439,20 @@ Complex-Selector
     {
       $$ = {
         type: 'selector',
-        nodes: [$1]
+        val: $1
       };
     }
   | Complex-Selector Combinator Compound-Selector
     {
       $$ = $1;
-      $$.nodes.push($2);
-      $$.nodes.push($3);
+      $$.val+=$2;
+      $$.val+=$3;
     }
   ;
 
 Compound-Selector
-  : Simple-Selector
-    {
-      $$ = {
-        type: 'selector_compound',
-        nodes: [$1]
-      };
-    }
-  | Compound-Selector NonStart-Selector
-    {
-      $$ = $1;
-      $$.nodes.push($2);
-    }
+  : Simple-Selector -> $1
+  | Compound-Selector NonStart-Selector -> $1+$2
   ;
 
 Combinator
@@ -481,12 +482,7 @@ Type-Selector
   ;
 
 Parent-Selector
-  : "&"
-    {
-      $$ = {
-        type: 'parent_selector'
-      };
-    }
+  : "&" -> $1
   ;
 
 Universal-Selector
