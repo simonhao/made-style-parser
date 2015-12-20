@@ -1,8 +1,8 @@
 {
   "name": "made-style-parser",
-  "version": "0.4.16",
+  "version": "0.5.0",
   "description": "made style parser",
-  "main": "./lib/parser.js",
+  "main": "index.js",
   "scripts": {
     "prepublish": "make build",
     "test": "node ./test/index.js"
@@ -21,6 +21,5 @@
   },
   "homepage": "https://github.com/simonhao/made-style-parser#readme",
   "dependencies": {
-    "jison": "^0.4.15"
   }
 }

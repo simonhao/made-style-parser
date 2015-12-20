@@ -380,6 +380,7 @@ Computable-Term
   : NUMBER -> $1
   | DIMENSION -> $1
   | PERCENTAGE -> $1
+  | HEX-COLOR -> $1
   ;
 
 Unary-Operator
@@ -394,7 +395,7 @@ String-Term
         name: $1
       };
     }
-  | STRING -> $1
+  | STRING -> $1.substring(1, $1.length-1)
   ;
 
 Function-Term
