@@ -1,0 +1,105 @@
+/**
+ * new style
+ * @author: SimonHao
+ * @date:   2016-01-05 14:17:09
+ */
+
+@import 'comm-style';
+@require 'comm-style';
+
+font: solid 10px solid red; // var
+font-size: 10px;
+border-radius: 10px/20px;
+font-family: 'ms-yahei','name','others' name 10px;
+background: url('image', name) center no-repeat;
+
+border-radius(len, args...){
+  -webkit-border-radius: len;
+  -moz-border-radius: len;
+  border-radius: len;
+}
+
+:root{
+  .class{
+    color: font;
+  }
+}
+
+html,
+body,
+*
+.class,
+:first-child,
+#hash,
+[attr],
+[attr='name'],
+html body
+html+body,
+html>body{
+  color:red;
+  font-family: 'ms yahei','others';
+  border-radius: 1px solid white;
+  background: url('img.png') 10px/20px no-repeat;
+  background-color: color; // you can use property name
+
+  :after,
+  :before{
+
+  }
+
+  html:after{
+
+  }
+
+  &.class{
+    font-size: color;
+  }
+
+  div{
+    font-size: 10px;
+    color: blue;
+  }
+
+  color: red;
+
+  div{
+    font-size: 10px;
+    color: blue;
+  }
+}
+
+@media screen,
+only screen,
+not screen,
+screen and (width : 200px),
+not screen and (width : 200px),
+not screen and (width:200px) and (width > 200px),
+not screen and (width:200px) and (200px > width > 300px){
+  div{
+    font-size: 10px;
+    color: blue;
+  }
+}
+
+@keyframes name{
+  from{
+    color: red;
+  }
+
+  50%{
+    color: green;
+  }
+
+  to{
+    color: blue;
+  }
+}
+
+@font-face{
+  font-family: 'haha';
+  unicode-range: U+26;                 /* single codepoint */
+  unicode-range: U+0-7F;
+  unicode-range: U+0025-00FF;          /* codepoint range */
+  unicode-range: U+4??;                /* wildcard range */
+  unicode-range: U+0025-00FF, U+4??;
+}
