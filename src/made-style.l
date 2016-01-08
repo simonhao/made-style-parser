@@ -240,7 +240,13 @@ unicode-range   {unicode-range-times}|[uU]\+{hex-digit}{1,6}\-{hex-digit}{1,6}|[
 
     return 'PSEUDO-CLASS';
   %}
+<STATE-COLONS>.
+  %{
+    this.popState();
+    this.unput(yytext);
 
+    return 'PSEUDO-CLASS';
+  %}
 
 {ws}";"{ws}
   %{

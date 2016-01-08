@@ -1,6 +1,6 @@
 {
   "name": "made-style-parser",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "made style parser",
   "main": "index.js",
   "scripts": {

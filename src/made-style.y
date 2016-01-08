@@ -7,7 +7,7 @@ Stylesheet
     {
       $$ = {
         type: 'stylesheet',
-        nodes: $1
+        rule: $1
       };
 
       return $$;
@@ -187,7 +187,15 @@ Property-Operator
   ;
 
 Function
-  : FUNCTION Function-Params ")"
+  : FUNCTION ")"
+    %{
+      $$ = {
+        type: 'function',
+        name: $1,
+        params: []
+      };
+    %}
+  | FUNCTION Function-Params ")"
     %{
       $$ = {
         type: 'function',
@@ -218,7 +226,16 @@ Function-Param
   ;
 
 Mixin-Rule
-  : FUNCTION Mix-Params ")" Rule-Block
+  : FUNCTION ")" Rule-Block
+    %{
+      $$ = {
+        type: 'mixin',
+        name: $1,
+        params: [],
+        nodes: $4
+      };
+    %}
+  | FUNCTION Mix-Params ")" Rule-Block
     %{
       $$ = {
         type: 'mixin',
@@ -533,6 +550,7 @@ Media-Query
   | Media-Query WSS AND WSS Media-Condition
     %{
       $$ = $1;
+      $$.val.push({type:'and', val:$3});
       $$.val.push($5);
     %}
   ;
@@ -567,14 +585,14 @@ Media-Condition
     %{
       $$ = {
         type: 'media_condition_range',
-        val: [{type:'ident', val:$2}, $3, $4]
+        val: [{type:'literal', val:$2}, $3, $4]
       };
     %}
   | "(" Media-Condition-Value Media-Operator IDENT Media-Operator Media-Condition-Value ")"
     %{
       $$ = {
         type: 'media_condition_range',
-        val: [$2,$3,{type:'ident', val:$4}, $5, $6]
+        val: [$2,$3,{type:'literal', val:$4}, $5, $6]
       };
     %}
   ;
