@@ -9,7 +9,7 @@
 var fs     = require('fs');
 var parser = require('../lib/parser.js').parser;
 
-var filename = __dirname + '/base.css';
+var filename = __dirname + '/reset.css';
 var str      = fs.readFileSync(filename, 'utf-8');
 
 var result = parser.parse(str);

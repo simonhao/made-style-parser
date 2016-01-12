@@ -32,8 +32,7 @@ Rule-List
   ;
 
 Qualified-Rule
-  : Comment
-  | WSS
+  : Comment -> $1
   | Media-Query-Rule -> $1
   | Import-Rule -> $1
   | At-Rule -> $1
@@ -44,10 +43,130 @@ Qualified-Rule
   | Declaration-Set-Rule -> $1
   ;
 
+Ident
+  : IDENT
+    %{
+      $$ = {
+        type: 'ident',
+        val: $1
+      };
+    %}
+  ;
+
+Number
+  : NUMBER
+    %{
+      $$ = {
+        type: 'literal',
+        val: $1
+      };
+    %}
+  ;
+
+Dimension
+  : DIMENSION
+    %{
+      $$ = {
+        type: 'literal',
+        val: $1
+      };
+    %}
+  ;
+
+Unicode-Range
+  : UNICODE-RANGE
+    %{
+      $$ = {
+        type: 'literal',
+        val: $1
+      };
+    %}
+  ;
+
+Percentage
+  : PERCENTAGE
+    %{
+      $$ = {
+        type: 'literal',
+        val: $1
+      };
+    %}
+  ;
+
+String
+  : STRING
+    %{
+      $$ = {
+        type: 'string',
+        val: $1
+      };
+    %}
+  ;
+
+Color
+  : COLOR
+    %{
+      $$ = {
+        type: 'literal',
+        val: $1
+      };
+    %}
+  ;
+
+Anb
+  : ANB
+    %{
+      $$ = {
+        type: 'literal',
+        val: $1
+      };
+    %}
+  ;
+
+Function
+  : FUNCTION ")"
+    %{
+      $$ = {
+        type: 'function',
+        name: $1,
+        params: []
+      };
+    %}
+  | FUNCTION Function-Params ")"
+    %{
+      $$ = {
+        type: 'function',
+        name: $1,
+        params: $2
+      }
+    %}
+  ;
+
+Function-Params
+  : Function-Param -> [$1]
+  | Function-Params "," Function-Param
+    %{
+      $$ = $1;
+      $$.push($3);
+    %}
+  ;
+
+Function-Param
+  : Ident -> $1
+  | Number -> $1
+  | Dimension -> $1
+  | Unicode-Range -> $1
+  | Percentage -> $1
+  | String
+  | Color
+  | Function -> $1
+  ;
+
 Rule-Block
   : "{" "}" -> null
   | "{" Rule-List "}" -> $2
   ;
+
 
 Comment
   : COMMENT
@@ -117,55 +236,13 @@ Property-Item
   ;
 
 Property
-  : IDENT
-    %{
-      $$ = {
-        type: 'ident',
-        val: $1
-      };
-    %}
-  | NUMBER
-    %{
-      $$ = {
-        type: 'literal',
-        val: $1
-      };
-    %}
-  | DIMENSION
-    %{
-      $$ = {
-        type: 'literal',
-        val: $1
-      };
-    %}
-  | UNICODE-RANGE
-    %{
-      $$ = {
-        type: 'literal',
-        val: $1
-      };
-    %}
-  | PERCENTAGE
-    %{
-      $$ = {
-        type: 'literal',
-        val: $1
-      };
-    %}
-  | STRING
-    %{
-      $$ = {
-        type: 'string',
-        val: $1
-      };
-    %}
-  | COLOR
-    %{
-      $$ = {
-        type: 'literal',
-        val: $1
-      };
-    %}
+  : Ident -> $1
+  | Number -> $1
+  | Dimension -> $1
+  | Unicode-Range -> $1
+  | Percentage -> $1
+  | String
+  | Color
   | Function -> $1
   ;
 
@@ -186,44 +263,7 @@ Property-Operator
     %}
   ;
 
-Function
-  : FUNCTION ")"
-    %{
-      $$ = {
-        type: 'function',
-        name: $1,
-        params: []
-      };
-    %}
-  | FUNCTION Function-Params ")"
-    %{
-      $$ = {
-        type: 'function',
-        name: $1,
-        params: $2
-      }
-    %}
-  ;
 
-Function-Params
-  : Function-Param -> [$1]
-  | Function-Params "," Function-Param
-    %{
-      $$ = $1;
-      $$.push($3);
-    %}
-  ;
-
-Function-Param
-  : Property -> $1
-  | ANB
-    %{
-      $$ = {
-        type: 'literal',
-        val: $1
-      };
-    %}
-  ;
 
 Mixin-Rule
   : FUNCTION ")" Rule-Block
@@ -256,13 +296,7 @@ Mix-Params
   ;
 
 Mix-Param
-  : IDENT
-    %{
-      $$ = {
-        type: 'ident',
-        val: $1
-      };
-    %}
+  : Ident -> $1
   | Rest-Param -> $1
   ;
 
@@ -276,9 +310,18 @@ Rest-Param
     %}
   ;
 
+Root
+  : ROOT
+    %{
+      $$ = {
+        type: 'literal',
+        val: $1
+      };
+    %}
+  ;
 
 Root-Rule
-  : ROOT Rule-Block
+  : Root Rule-Block
     %{
       $$ = {
         type: 'root',
@@ -437,26 +480,20 @@ Attrib-Selector
         name: $2
       };
     %}
-  | "[" IDENT "=" IDENT "]"
+  | "[" IDENT "=" Ident "]"
     %{
       $$ = {
         type: 'attrib_selector',
         name: $2,
-        val: {
-          type: 'ident',
-          val: $4
-        }
+        val: $4
       };
     %}
-  | "[" IDENT "=" STRING "]"
+  | "[" IDENT "=" String "]"
     %{
       $$ = {
         type: 'attrib_selector',
         name: $2,
-        val: {
-          type: 'string',
-          val: $4
-        }
+        val: $4
       };
     %}
   ;
@@ -466,36 +503,60 @@ Pseudo-Selector
     %{
       $$ = {
         type: 'pseudo_class_selector',
-        name: {
-          type: 'ident',
-          val: $2
-        }
+        name: $2
       };
     %}
   | PSEUDO-ELEMENT IDENT
     %{
       $$ = {
         type: 'pseudo_element_selector',
-        name: {
-          type: 'ident',
-          val: $2
-        }
+        name: $2
       };
     %}
-  | PSEUDO-CLASS Function
+  | PSEUDO-CLASS Function-Pseudo
     %{
       $$ = {
         type: 'pseudo_class_selector',
-        name: $2
+        func: $2
       };
     %}
-  | PSEUDO-ELEMENT Function
+  | PSEUDO-ELEMENT Function-Pseudo
     %{
       $$ = {
         type: 'pseudo_element_selector',
-        name: $2
+        func: $2
       };
     %}
+  ;
+
+Function-Pseudo
+  : FUNCTION ")"
+    %{
+      $$ = {
+        type: 'function_pseudo',
+        name: $1
+      };
+    %}
+  | FUNCTION Pseudo-Value ")"
+    %{
+      $$ = {
+        type: 'function_pseudo',
+        name: $1,
+        val: $2
+      };
+    %}
+  ;
+
+Pseudo-Value
+  : Complex-Selector -> $1
+  | Root -> $1
+  | Number -> $1
+  | Dimension -> $1
+  | Unicode-Range -> $1
+  | Percentage -> $1
+  | String -> $1
+  | Color -> $1
+  | Anb -> $1
   ;
 
 Media-Query-Rule
@@ -614,41 +675,11 @@ Media-Condition-Value
   ;
 
 Media-Condition-Item
-  : NUMBER
-    %{
-      $$ = {
-        type: 'literal',
-        val: $1
-      };
-    %}
-  | DIMENSION
-    %{
-      $$ = {
-        type: 'literal',
-        val: $1
-      };
-    %}
-  | PERCENTAGE
-    %{
-      $$ = {
-        type: 'literal',
-        val: $1
-      };
-    %}
-  | STRING
-    %{
-      $$ = {
-        type: 'string',
-        val: $1
-      };
-    %}
-  | COLOR
-    %{
-      $$ = {
-        type: 'literal',
-        val: $1
-      };
-    %}
+  : Number -> $1
+  | Dimension -> $1
+  | Percentage -> $1
+  | String -> $1
+  | Color -> $1
   | Function -> $1
   ;
 

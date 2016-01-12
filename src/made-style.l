@@ -52,7 +52,6 @@ unicode-range   {unicode-range-times}|[uU]\+{hex-digit}{1,6}\-{hex-digit}{1,6}|[
     yytext = yytext.substring(2, (yytext.length - 2));
     return 'COMMENT';
   %}
-
 {ws}{newline}{ws}
   %{
     /* ignore newline */
