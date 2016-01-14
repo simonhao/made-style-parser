@@ -19,6 +19,8 @@ nmchar          [_a-zA-Z0-9-]|{nonascii}|{escape}
 ident           {nmstart}{nmchar}*
 
 integer         [0-9]+
+float           [0-9]*"."[0-9]+
+scientific      "e"[+-]?[0-9]+
 n               "n"
 odd             "odd"
 even            "even"
@@ -31,7 +33,7 @@ string          {string1}|{string2}
 string1         \"([^\n\r\f\\"]|\\{newline}|{escape})*\"
 string2         \'([^\n\r\f\\']|\\{newline}|{escape})*\'
 
-number          [+-]?([0-9]+|[0-9]*\.[0-9]+)("e"[+-]?[0-9]+)?
+number          [+-]?{float}{scientific}?|[+-]?{integer}{scientific}?
 unicode-range-1 [uU]\+{hex-digit}{1}\?{1,5}
 unicode-range-2 [uU]\+{hex-digit}{2}\?{1,4}
 unicode-range-3 [uU]\+{hex-digit}{3}\?{1,3}
